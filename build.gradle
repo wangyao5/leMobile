@@ -26,8 +26,17 @@ targetCompatibility = 1.8
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+
     compile('org.apache.httpcomponents:httpclient:4.5.2')
     compile('org.json:json:20160810')
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
+    // https://mvnrepository.com/artifact/org.apache.derby/derbyclient
+    compile group: 'org.apache.derby', name: 'derbyclient', version: '10.13.1.1'
+
+
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('com.jayway.jsonpath:json-path')

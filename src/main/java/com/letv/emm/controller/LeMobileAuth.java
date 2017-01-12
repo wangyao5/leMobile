@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
-@RequestMapping(path = "/le/mobile/api")
+@RequestMapping(path = "/LeMobile/api")
 public class LeMobileAuth {
 
     @Autowired
