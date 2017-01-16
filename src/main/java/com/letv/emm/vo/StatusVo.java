@@ -5,11 +5,6 @@ public class StatusVo {
     private int code;
     private Object body;
 
-    enum Code {
-        SUCCESS,
-        FATAL
-    }
-
     public String getMessage() {
         return message;
     }
