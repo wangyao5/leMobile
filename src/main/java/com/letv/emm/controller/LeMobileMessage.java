@@ -1,6 +1,5 @@
 package com.letv.emm.controller;
 
-import com.letv.emm.entity.PushPropEntity;
 import com.letv.emm.services.MessageService;
 import com.letv.emm.vo.*;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -20,86 +19,16 @@ import java.util.Arrays;
 
 @RestController
 @CrossOrigin
-@RequestMapping(path = "/LeMobile/message")
+@RequestMapping(path = "/LeMobile/send")
 public class LeMobileMessage {
-
     @Autowired
     private MessageService messageService;
 
-    @RequestMapping(value = "/regist", method = RequestMethod.POST)
-    @ResponseBody
-    public StatusVo regist(@RequestBody KingdeePushVo pushVo) {
-        StatusVo statusVo = new StatusVo();
-        if (messageService.exists(pushVo.getAppid())) {
-            statusVo.setCode(StatusCode.FATAL.ordinal());
-            statusVo.setMessage("Had registed" + pushVo.getAppid());
-        } else {
-            PushPropEntity pushPropEntity = messageService.save(pushVo.getAppid(), pushVo.getNo(), pushVo.getPub(), pushVo.getPubk());
-            if (null != pushPropEntity) {
-                statusVo.setCode(StatusCode.SUCCESS.ordinal());
-                PushPropResult pushPropResult = new PushPropResult();
-                pushPropResult.setAppKey(pushPropEntity.getAppkey());
-                statusVo.setBody(pushPropResult);
-            }
-        }
-
-        return statusVo;
-    }
-
-    @RequestMapping(value = "/query/{appId}", method = RequestMethod.GET)
-    @ResponseBody
-    public StatusVo query(@PathVariable("appId") String appId) {
-        StatusVo statusVo = new StatusVo();
-        if (messageService.exists(appId)) {
-            PushPropEntity pushPropEntity = messageService.findByAppId(appId);
-            if (null != pushPropEntity) {
-                statusVo.setCode(StatusCode.SUCCESS.ordinal());
-                statusVo.setBody(pushPropEntity);
-            }
-        } else {
-            statusVo.setCode(StatusCode.FATAL.ordinal());
-            statusVo.setMessage("NOT Exist " + appId);
-        }
-
-        return statusVo;
-    }
-
-    @RequestMapping(value = "/update/{appId}", method = RequestMethod.POST)
-    @ResponseBody
-    public StatusVo update(@PathVariable("appId") String appId, @RequestBody KingdeePushVo pushVo) {
-        StatusVo statusVo = new StatusVo();
-        if (messageService.exists(appId)) {
-            messageService.update(appId, pushVo.getNo(), pushVo.getPub(), pushVo.getPubk());
-            PushPropResult pushPropResult = new PushPropResult();
-            pushPropResult.setAppKey(messageService.getAppKey(appId, pushVo.getNo(), pushVo.getPub(), pushVo.getPubk()));
-            statusVo.setCode(StatusCode.SUCCESS.ordinal());
-            statusVo.setBody(pushPropResult);
-        } else {
-            statusVo.setCode(StatusCode.FATAL.ordinal());
-            statusVo.setMessage("FATAL Not Exists appId = " + appId);
-        }
-        return statusVo;
-    }
-
-    @RequestMapping(value = "/delete/{appId}", method = RequestMethod.POST)
-    @ResponseBody
-    public StatusVo delete(@PathVariable("appId") String appId) {
-        StatusVo statusVo = new StatusVo();
-        if (messageService.exists(appId)) {
-            messageService.deleteByAppId(appId);
-            statusVo.setCode(StatusCode.SUCCESS.ordinal());
-        } else {
-            statusVo.setCode(StatusCode.FATAL.ordinal());
-            statusVo.setMessage("FATAL Not Exists appId = " + appId);
-        }
-        return statusVo;
-    }
-
-    @RequestMapping(value = "/send/{appKey}", method = RequestMethod.POST)
-    public StatusVo sendMessage(@PathVariable("appKey") String appKey, @RequestBody MessageVo message) {
+    @RequestMapping(value = "/text/{tabNo}/{appKey}", method = RequestMethod.POST)
+    public StatusVo sendTextMessage(@PathVariable("tabNo") int tabNo, @PathVariable("appKey") String appKey, @RequestBody TextMessageVo message) {
         StatusVo statusVo = new StatusVo();
         if (null != messageService.findByAppKey(appKey)) {
-            messageService.sendMessage(appKey, message.getAccount());
+            messageService.sendTextMessage(appKey, tabNo, message);
         } else {
             statusVo.setCode(StatusCode.FATAL.ordinal());
             statusVo.setMessage("AppKey is wrong!");
@@ -108,14 +37,79 @@ public class LeMobileMessage {
         return statusVo;
     }
 
-    @RequestMapping(value = "/send/{appId}", method = RequestMethod.POST)
-    public void push(@PathVariable("appId") String appid) {
+    @RequestMapping(value = "/pubacc/text/{appKey}", method = RequestMethod.POST)
+    public StatusVo sendPubaccTextMessage(@PathVariable("appKey") String appKey, @RequestBody TextMessageVo message) {
+        StatusVo statusVo = new StatusVo();
+        if (null != messageService.findByAppKey(appKey)) {
+            messageService.sendPubaccTextMessage(appKey, message);
+        } else {
+            statusVo.setCode(StatusCode.FATAL.ordinal());
+            statusVo.setMessage("AppKey is wrong!");
+        }
+
+        return statusVo;
+    }
+
+    @RequestMapping(value = "/link/{tabNo}/{appKey}", method = RequestMethod.POST)
+    public StatusVo sendLinkMessage(@PathVariable("tabNo") int tabNo, @PathVariable("appKey") String appKey, @RequestBody LinkMessageVo message) {
+        StatusVo statusVo = new StatusVo();
+        if (null != messageService.findByAppKey(appKey)) {
+            messageService.sendLinkMessage(appKey, tabNo, message);
+        } else {
+            statusVo.setCode(StatusCode.FATAL.ordinal());
+            statusVo.setMessage("AppKey is wrong!");
+        }
+
+        return statusVo;
+    }
+
+    @RequestMapping(value = "/pubacc/link/{appKey}", method = RequestMethod.POST)
+    public StatusVo sendPubaccLinkMessage(@PathVariable("appKey") String appKey, @RequestBody LinkMessageVo message) {
+        StatusVo statusVo = new StatusVo();
+        if (null != messageService.findByAppKey(appKey)) {
+            messageService.sendPubaccLinkMessage(appKey, message);
+        } else {
+            statusVo.setCode(StatusCode.FATAL.ordinal());
+            statusVo.setMessage("AppKey is wrong!");
+        }
+
+        return statusVo;
+    }
+
+    @RequestMapping(value = "/rich/{tabNo}/{appKey}", method = RequestMethod.POST)
+    public StatusVo sendPubaccRichMessage(@PathVariable("tabNo") int tabNo, @PathVariable("appKey") String appKey, @RequestBody RichMessageVo message) {
+        StatusVo statusVo = new StatusVo();
+        if (null != messageService.findByAppKey(appKey)) {
+            messageService.sendRichMessage(appKey, tabNo, message);
+        } else {
+            statusVo.setCode(StatusCode.FATAL.ordinal());
+            statusVo.setMessage("AppKey is wrong!");
+        }
+
+        return statusVo;
+    }
+
+    @RequestMapping(value = "/pubacc/rich/{appKey}", method = RequestMethod.POST)
+    public StatusVo sendPubaccRichMessage(@PathVariable("appKey") String appKey, @RequestBody RichMessageVo message) {
+        StatusVo statusVo = new StatusVo();
+        if (null != messageService.findByAppKey(appKey)) {
+            messageService.sendPubaccRichMessage(appKey, message);
+        } else {
+            statusVo.setCode(StatusCode.FATAL.ordinal());
+            statusVo.setMessage("AppKey is wrong!");
+        }
+
+        return statusVo;
+    }
+
+    @RequestMapping(value = "/test/{appId}", method = RequestMethod.POST)
+    public void push(@PathVariable("appId") String appId) {
         String url = "http://msg.lecommons.com/pubacc/pubsend";
         JSONObject from = new JSONObject();
         String no = "102";// 工作圈号 XT-673abff0-60e8-403f-9353-bc9d87193a92
         String pub = "XT-673abff0-60e8-403f-9353-bc9d87193a92";// 公共号编码
         String pubk = "17304812cba5ef0a0b152c56ce2bcbcd";// 公共号秘钥
-        String appId = "10206";// 轻应用ID
+//        String appId = "10206";// 轻应用ID
         String time = Long.toString(System.currentTimeMillis());
         String nonce = Double.toString(Math.random()).substring(2);
         from.put("no", no);
@@ -129,19 +123,19 @@ public class LeMobileMessage {
         JSONObject to = new JSONObject();
         to.put("no", no);
         to.put("code", 2);
-        to.put("user", new String[]{"shengliguo@letv.com"});
+        to.put("user", new String[]{"shengliguo@letv.com", "mis-test02@letv.com"});
         tos.put(to);
         JSONObject msg = new JSONObject();
-        msg.put("text", "已办最新数据测试");
-        msg.put("url", "http://oa.test.lecommons.com/appweb/message.jsp?id=0");
-        msg.put("appid", appid);
-        msg.put("todo", "2");
-        // msg.put("todoPriStatus", "undo");
-        // msg.put("todoPriStatus", "done");
+        msg.put("text", "来一把t");
+//        msg.put("url", "http://oa.test.lecommons.com/appweb/message.jsp?id=0");
+//        msg.put("appid", appId);
+        msg.put("todo", "1");
+//         msg.put("todoPriStatus", "undo");
+//         msg.put("todoPriStatus", "done");
         JSONObject content = new JSONObject();
         content.put("from", from);
         content.put("to", tos);
-        content.put("type", 5);
+        content.put("type", 2);
         content.put("msg", msg);
         try {
             CloseableHttpClient client = HttpClients.createDefault();
