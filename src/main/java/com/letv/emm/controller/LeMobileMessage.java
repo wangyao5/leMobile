@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
-@RequestMapping(path = "/LeMobile/send")
+@RequestMapping(path = "/LeMobile/api/send")
 public class LeMobileMessage {
     @Autowired
     private MessageService messageService;
