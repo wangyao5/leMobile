@@ -20,6 +20,7 @@ paths:
     post:
       tags:
         - "lecommons-mobile"
+      summary: "乐盟移动认证接口"
       parameters:
         - name: "ticket"
           in: "path"
@@ -34,13 +35,9 @@ paths:
             $ref: "#/definitions/AppInfo"
       responses:
         200:
-          description: An Object of UserInfo
+          description: string of userinfo/erro message
           schema:
-            $ref: '#/definitions/UserInfo'
-        default:
-          description: Unexpected error
-          schema:
-            $ref: '#/definitions/Error'
+            type: "string"
 
   /api/send/text/{tabNo}/{appKey}:
       post:
@@ -65,13 +62,9 @@ paths:
               $ref: "#/definitions/TextMessage"
         responses:
           200:
-            description: An Object of UserInfo
+            description: An Object of Status
             schema:
-              $ref: '#/definitions/UserInfo'
-          default:
-            description: Unexpected error
-            schema:
-              $ref: '#/definitions/Error'
+              $ref: '#/definitions/Status'
 
 definitions:
   AppInfo:
@@ -90,7 +83,7 @@ definitions:
         description: "固定值"
         enum:
         - "client_credential"
-  UserInfo:
+  Status:
     type: object
     properties:
       code:
@@ -98,18 +91,9 @@ definitions:
         format: int32
       message:
         type: string
-      fields:
-        type: string
-  Error:
-    type: object
-    properties:
-      code:
-        type: integer
-        format: int32
-      message:
-        type: string
-      fields:
-        type: string
+      body:
+        type: object
+
   TextMessage:
     type: object
     properties:
