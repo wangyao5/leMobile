@@ -168,8 +168,7 @@ public class MessageService {
         content.put("to", tos);
         content.put("type", 2);//文本消息
         content.put("msg", msg);
-        execHttp(content);
-        return true;
+        return execHttp(content);
     }
 
 
@@ -252,6 +251,7 @@ public class MessageService {
     }
 
     private boolean execHttp(JSONObject content) {
+        JSONObject rstJson = null;
         try {
             CloseableHttpClient client = HttpClients.createDefault();
             HttpPost post = new HttpPost(pushUrl);
@@ -262,12 +262,17 @@ public class MessageService {
             long t1 = System.currentTimeMillis();
             CloseableHttpResponse response = client.execute(post);
             long t2 = System.currentTimeMillis();
-            System.out.println("耗时：" + (t2 - t1) / 1000);
+            System.out.println("耗时：" + (t2 - t1) + "ms");
             String result = EntityUtils.toString(response.getEntity());
+            rstJson = new JSONObject(result);
             System.out.println("===================" + result);
         } catch (Exception e) {
             e.printStackTrace(System.err);
         }
-        return true;
+
+        if (rstJson.getJSONObject("members").getBoolean("success")) {
+            return true;
+        }
+        return false;
     }
 }
