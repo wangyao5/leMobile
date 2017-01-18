@@ -40,32 +40,55 @@ paths:
             type: "string"
 
   /api/send/text/{tabNo}/{appKey}:
-      post:
-        tags:
-          - "lecommons-mobile"
-        parameters:
-          - name: "tabNo"
-            in: "path"
-            description: "0：发送到待办通知的待办Tab页，1：发送到待办通知的已办Tab页，2：发送到待办通知的通知Tab页"
-            required: true
-            type: "string"
-          - name: "appKey"
-            in: "path"
-            description: "每个应用有唯一的appkey"
-            required: true
-            type: "string"
-          - name: "body"
-            in: "body"
-            description: "文本消息信息"
-            required: true
-            schema:
-              $ref: "#/definitions/TextMessage"
-        responses:
-          200:
-            description: An Object of Status
-            schema:
-              $ref: '#/definitions/Status'
+    post:
+      tags:
+        - "lecommons-mobile"
+      summary: "乐盟移动待办通知，文本消息发送接口"
+      parameters:
+        - name: "tabNo"
+          in: "path"
+          description: "0：发送到待办通知的待办Tab页，1：发送到待办通知的已办Tab页，2：发送到待办通知的通知Tab页"
+          required: true
+          type: "string"
+        - name: "appKey"
+          in: "path"
+          description: "每个应用有唯一的appkey"
+          required: true
+          type: "string"
+        - name: "body"
+          in: "body"
+          description: "文本消息信息"
+          required: true
+          schema:
+            $ref: "#/definitions/TextMessage"
+      responses:
+        200:
+          description: An Object of Status
+          schema:
+            $ref: '#/definitions/Status'
 
+  /api/send/pubacc/text/{appKey}:
+    post:
+      tags:
+        - "lecommons-mobile"
+      summary: "乐盟移动公共号通知，文本消息发送接口"
+      parameters:
+        - name: "appKey"
+          in: "path"
+          description: "每个应用有唯一的appkey"
+          required: true
+          type: "string"
+        - name: "body"
+          in: "body"
+          description: "文本消息信息"
+          required: true
+          schema:
+            $ref: "#/definitions/TextMessage"
+      responses:
+        200:
+          description: An Object of Status
+          schema:
+            $ref: '#/definitions/Status'
 definitions:
   AppInfo:
     type: object
