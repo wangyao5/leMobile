@@ -161,7 +161,7 @@ public class MessageService {
         PushPropEntity pushPropEntity = findByAppKey(appkey);
         JSONObject from = getFromJson(pushPropEntity);
         JSONArray tos = getTos(pushPropEntity.getCommunityNo(), textMessage.getAccounts());
-        JSONObject msg = getMessageJson();
+        JSONObject msg = getPubaccMessageJson();
         msg.put("text", textMessage.getMessage());
         JSONObject content = new JSONObject();
         content.put("from", from);
@@ -194,7 +194,7 @@ public class MessageService {
         JSONArray tos = new JSONArray();
         JSONObject to = new JSONObject();
         to.put("no", communityNo);
-        if (null != account && account.size() > 0) {
+        if (null == account || account.size() == 0) {
             to.put("code", "all");
         } else {
             to.put("code", 2);
