@@ -1,0 +1,174 @@
+# this is an example of the Uber API
+# as a demonstration of an API spec in YAML
+swagger: '2.0'
+info:
+  title: leEco mobile API
+  description: LeEco mobile API
+  version: "1.0.0"
+# the domain of the service
+host: mobile.lecommons.com
+
+# array of all schemes that your API supports
+schemes:
+  - https
+# will be prefixed to all paths
+basePath: /LeMobile
+produces:
+  - application/json
+paths:
+  /maintain/app/message/regist:
+    post:
+      tags:
+        - "lecommons-mobile-message-manage"
+      summary: "乐盟移动注册推送信息"
+      parameters:
+        - name: "body"
+          in: "body"
+          description: "App的配置信息"
+          required: true
+          schema:
+            $ref: "#/definitions/KingdeePush"
+      responses:
+        200:
+          description: result with appkey/erro info
+          schema:
+            $ref: '#/definitions/RegistResult'
+  /maintain/app/message/query/{appId}:
+    get:
+      tags:
+        - "lecommons-mobile-message-manage"
+      summary: "乐盟移动查询推送信息"
+      parameters:
+        - name: "appId"
+          in: "path"
+          description: "应用ID"
+          required: true
+          type: "string"
+          format: "string"
+      responses:
+        200:
+          description: result with appkey and appInfo
+          schema:
+            $ref: '#/definitions/AllAppInfoResult'
+  /maintain/app/message/update/{appId}:
+    post:
+      tags:
+        - "lecommons-mobile-message-manage"
+      summary: "乐盟移动更新推送信息"
+      parameters:
+        - name: "appId"
+          in: "path"
+          description: "应用ID"
+          required: true
+          type: "string"
+          format: "string"
+      responses:
+        200:
+          description: result with appkey and appInfo
+          schema:
+            $ref: '#/definitions/AllAppInfoResult'
+  /maintain/app/message/delete/{appId}:
+    post:
+      tags:
+        - "lecommons-mobile-message-manage"
+      summary: "乐盟移动更新推送信息"
+      parameters:
+        - name: "appId"
+          in: "path"
+          description: "应用ID"
+          required: true
+          type: "string"
+          format: "string"
+      responses:
+        200:
+          description: result with status
+          schema:
+            $ref: '#/definitions/DelStatus'
+definitions:
+  KingdeePush:
+    type: object
+    properties:
+      no:
+        type: "string"
+        description: "应用ID"
+        format: "string"
+      pub:
+        type: "string"
+        format: "string"
+        description: ""
+      pubk:
+        type: "string"
+        format: "string"
+        description: "xxxx"
+      appid:
+        type: "string"
+        format: "string"
+        description: "应用ID"
+  RegistBody:
+    type: object
+    properties:
+      appKey:
+        type: "string"
+        format: "string"
+  RegistResult:
+    type: object
+    properties:
+      message:
+        type: "string"
+        format: "string"
+        description: "message of service"
+      code:
+        type: "integer"
+        format: "int32"
+        description: "0:成功，1失败"
+      body:
+        $ref: "#/definitions/RegistBody"
+  AllAppInfoBody:
+    type: object
+    properties:
+      appId:
+        type: "string"
+        format: "string"
+        description: "应用ID"
+      communityNo:
+        type: "string"
+        format: "string"
+        description: "工作圈号"
+      pub:
+        type: "string"
+        format: "string"
+        description: "公共号编码"
+      pubk:
+        type: "string"
+        format: "string"
+        description: "公共号秘钥"
+      appkey:
+        type: "string"
+        format: "string"
+        description: "为第三方调用分配的key"
+  AllAppInfoResult:
+    type: object
+    properties:
+      message:
+        type: "string"
+        format: "string"
+        description: "message of service"
+      code:
+        type: "integer"
+        format: "int32"
+        description: "0:成功，1失败"
+      body:
+        $ref: "#/definitions/AllAppInfoBody"
+  DelStatus:
+    type: object
+    properties:
+      message:
+        type: "string"
+        format: "string"
+        description: "message of service"
+      code:
+        type: "integer"
+        format: "int32"
+        description: "0:成功，1失败"
+      body:
+        type: "object"
