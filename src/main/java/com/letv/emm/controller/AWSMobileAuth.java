@@ -38,7 +38,7 @@ public class AWSMobileAuth {
         StatusVo statusVo = new StatusVo();
         AppVo app = new AppVo();
         app.setAppId(appId);
-        app.setAppSecret(grantType);
+        app.setGrantType(grantType);
         app.setAppSecret(appSecret);
         String accessToken = authService.getAccessToken(app);
         if (null == accessToken || accessToken.isEmpty()) {
