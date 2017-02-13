@@ -155,9 +155,10 @@ public class ApiProxyService {
         if (url == null) {
             return false;
         }
-        String regEx = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
-        Pattern p = Pattern.compile(regEx);
-        Matcher matcher = p.matcher(url);
-        return matcher.matches();
+//        String regEx = "^(https?|ftp|file)://[a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+//        Pattern p = Pattern.compile(regEx);
+//        Matcher matcher = p.matcher(url);
+//        return matcher.matches();
+        return true;
     }
 }
