@@ -2,6 +2,7 @@ package com.letv.emm.controller;
 
 import com.letv.emm.services.AuthService;
 import com.letv.emm.vo.AppVo;
+import com.letv.emm.vo.SidVo;
 import com.letv.emm.vo.StatusCode;
 import com.letv.emm.vo.StatusVo;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -68,8 +69,8 @@ public class AWSMobileAuth {
 
         statusVo.setCode(StatusCode.SUCCESS.ordinal());
 
-        JSONObject sidObj = new JSONObject();
-        sidObj.put("sid", sid);
+        SidVo sidObj = new SidVo();
+        sidObj.setSid(sid);
         statusVo.setBody(sidObj);
         return statusVo;
     }
