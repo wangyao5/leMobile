@@ -16,6 +16,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 @RestController
 @CrossOrigin
@@ -70,6 +72,11 @@ public class AWSMobileAuth {
         statusVo.setCode(StatusCode.SUCCESS.ordinal());
 
         SidVo sidObj = new SidVo();
+        try {
+            sid = URLEncoder.encode(sid, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         sidObj.setSid(sid);
         statusVo.setBody(sidObj);
         return statusVo;
