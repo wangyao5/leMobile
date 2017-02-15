@@ -78,6 +78,7 @@ public class AWSMobileAuth {
             e.printStackTrace();
         }
         sidObj.setSid(sid);
+        System.out.println("sid="+sid);
         statusVo.setBody(sidObj);
         return statusVo;
     }
