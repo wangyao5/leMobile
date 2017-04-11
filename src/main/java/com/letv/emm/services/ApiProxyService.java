@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 public class ApiProxyService {
     private static final String ProxyUrlNamed = "url";
 
-    private static final String[] expectHeaders = new String[]{ "host", "content-length", "url", ProxyUrlNamed};
+    private static final String[] expectHeaders = new String[]{ "host", "content-length", ProxyUrlNamed};
 
     public void invokeApiProxy(HttpServletRequest request, HttpServletResponse response) {
         String httpMethod = request.getMethod();
@@ -155,7 +155,7 @@ public class ApiProxyService {
         if (url == null) {
             return false;
         }
-        String regEx = "^(https?|ftp|file)://[a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+        String regEx = "^(https?|ftp|file)://[a-zA-Z0-9+&@#/%?=~_|!:,.;-]*[-a-zA-Z0-9+&@#/%=~_|]";
         Pattern p = Pattern.compile(regEx);
         Matcher matcher = p.matcher(url);
         return matcher.matches();
