@@ -16,8 +16,8 @@ public class LeMobileMessage {
     public StatusVo sendTextMessage(@PathVariable("tabNo") int tabNo, @PathVariable("appKey") String appKey, @RequestBody TextMessageVo message) {
         StatusVo statusVo = new StatusVo();
         if (null != messageService.findByAppKey(appKey)) {
-            boolean status = messageService.sendTextMessage(appKey, tabNo, message);
-            resetStatusWithHttpResponse(statusVo, status);
+            String result = messageService.sendTextMessage(appKey, tabNo, message);
+            resetStatusWithHttpResponse(statusVo, result);
         } else {
             statusVo.setCode(StatusCode.FATAL.ordinal());
             statusVo.setMessage("AppKey is wrong!");
@@ -30,8 +30,8 @@ public class LeMobileMessage {
     public StatusVo sendPubaccTextMessage(@PathVariable("appKey") String appKey, @RequestBody TextMessageVo message) {
         StatusVo statusVo = new StatusVo();
         if (null != messageService.findByAppKey(appKey)) {
-            boolean status = messageService.sendPubaccTextMessage(appKey, message);
-            resetStatusWithHttpResponse(statusVo, status);
+            String result = messageService.sendPubaccTextMessage(appKey, message);
+            resetStatusWithHttpResponse(statusVo, result);
         } else {
             statusVo.setCode(StatusCode.FATAL.ordinal());
             statusVo.setMessage("AppKey is wrong!");
@@ -44,8 +44,8 @@ public class LeMobileMessage {
     public StatusVo sendLinkMessage(@PathVariable("tabNo") int tabNo, @PathVariable("appKey") String appKey, @RequestBody LinkMessageVo message) {
         StatusVo statusVo = new StatusVo();
         if (null != messageService.findByAppKey(appKey)) {
-            boolean status = messageService.sendLinkMessage(appKey, tabNo, message);
-            resetStatusWithHttpResponse(statusVo, status);
+            String result = messageService.sendLinkMessage(appKey, tabNo, message);
+            resetStatusWithHttpResponse(statusVo, result);
         } else {
             statusVo.setCode(StatusCode.FATAL.ordinal());
             statusVo.setMessage("AppKey is wrong!");
@@ -58,8 +58,8 @@ public class LeMobileMessage {
     public StatusVo sendPubaccLinkMessage(@PathVariable("appKey") String appKey, @RequestBody LinkMessageVo message) {
         StatusVo statusVo = new StatusVo();
         if (null != messageService.findByAppKey(appKey)) {
-            boolean status = messageService.sendPubaccLinkMessage(appKey, message);
-            resetStatusWithHttpResponse(statusVo, status);
+            String result = messageService.sendPubaccLinkMessage(appKey, message);
+            resetStatusWithHttpResponse(statusVo, result);
         } else {
             statusVo.setCode(StatusCode.FATAL.ordinal());
             statusVo.setMessage("AppKey is wrong!");
@@ -72,8 +72,8 @@ public class LeMobileMessage {
     public StatusVo sendPubaccRichMessage(@PathVariable("tabNo") int tabNo, @PathVariable("appKey") String appKey, @RequestBody RichMessageVo message) {
         StatusVo statusVo = new StatusVo();
         if (null != messageService.findByAppKey(appKey)) {
-            boolean status = messageService.sendRichMessage(appKey, tabNo, message);
-            resetStatusWithHttpResponse(statusVo, status);
+            String result = messageService.sendRichMessage(appKey, tabNo, message);
+            resetStatusWithHttpResponse(statusVo, result);
         } else {
             statusVo.setCode(StatusCode.FATAL.ordinal());
             statusVo.setMessage("AppKey is wrong!");
@@ -86,8 +86,8 @@ public class LeMobileMessage {
     public StatusVo sendPubaccRichMessage(@PathVariable("appKey") String appKey, @RequestBody RichMessageVo message) {
         StatusVo statusVo = new StatusVo();
         if (null != messageService.findByAppKey(appKey)) {
-            boolean status = messageService.sendPubaccRichMessage(appKey, message);
-            resetStatusWithHttpResponse(statusVo, status);
+            String result = messageService.sendPubaccRichMessage(appKey, message);
+            resetStatusWithHttpResponse(statusVo, result);
         } else {
             statusVo.setCode(StatusCode.FATAL.ordinal());
             statusVo.setMessage("AppKey is wrong!");
@@ -96,12 +96,8 @@ public class LeMobileMessage {
         return statusVo;
     }
 
-    private void resetStatusWithHttpResponse(StatusVo statusVo, boolean status) {
-        if (status) {
+    private void resetStatusWithHttpResponse(StatusVo statusVo, String result) {
             statusVo.setCode(StatusCode.SUCCESS.ordinal());
-        } else {
-            statusVo.setCode(StatusCode.FATAL.ordinal());
-            statusVo.setMessage("Service send message Fatal!");
-        }
+            statusVo.setMessage(result);
     }
 }

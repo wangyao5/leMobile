@@ -74,7 +74,7 @@ public class MessageService {
         return DigestUtils.sha1Hex(appInfoString);
     }
 
-    public boolean sendLinkMessage(String appkey, int tabNo, LinkMessageVo message) {
+    public String sendLinkMessage(String appkey, int tabNo, LinkMessageVo message) {
         PushPropEntity pushPropEntity = findByAppKey(appkey);
         JSONObject from = getFromJson(pushPropEntity);
         JSONArray tos = getTos(pushPropEntity.getCommunityNo(), message.getAccounts());
@@ -91,7 +91,7 @@ public class MessageService {
         return execHttp(content);
     }
 
-    public boolean sendPubaccLinkMessage(String appkey, LinkMessageVo message) {
+    public String sendPubaccLinkMessage(String appkey, LinkMessageVo message) {
         PushPropEntity pushPropEntity = findByAppKey(appkey);
         JSONObject from = getFromJson(pushPropEntity);
         JSONArray tos = getTos(pushPropEntity.getCommunityNo(), message.getAccounts());
@@ -107,7 +107,7 @@ public class MessageService {
         return execHttp(content);
     }
 
-    public boolean sendRichMessage(String appkey, int tabNo, RichMessageVo message) {
+    public String sendRichMessage(String appkey, int tabNo, RichMessageVo message) {
         List<RichMessageItem> richMessageItemList = message.getRichMessageItemList();
         PushPropEntity pushPropEntity = findByAppKey(appkey);
         JSONObject from = getFromJson(pushPropEntity);
@@ -124,7 +124,7 @@ public class MessageService {
         return execHttp(content);
     }
 
-    public boolean sendPubaccRichMessage(String appkey, RichMessageVo message) {
+    public String sendPubaccRichMessage(String appkey, RichMessageVo message) {
         List<RichMessageItem> richMessageItemList = message.getRichMessageItemList();
         PushPropEntity pushPropEntity = findByAppKey(appkey);
         JSONObject from = getFromJson(pushPropEntity);
@@ -141,7 +141,7 @@ public class MessageService {
         return execHttp(content);
     }
 
-    public boolean sendTextMessage(String appkey, int tabNo, TextMessageVo textMessage) {
+    public String sendTextMessage(String appkey, int tabNo, TextMessageVo textMessage) {
         PushPropEntity pushPropEntity = findByAppKey(appkey);
         JSONObject from = getFromJson(pushPropEntity);
         JSONArray tos = getTos(pushPropEntity.getCommunityNo(), textMessage.getAccounts());
@@ -157,7 +157,7 @@ public class MessageService {
         return execHttp(content);
     }
 
-    public boolean sendPubaccTextMessage(String appkey, TextMessageVo textMessage) {
+    public String sendPubaccTextMessage(String appkey, TextMessageVo textMessage) {
         PushPropEntity pushPropEntity = findByAppKey(appkey);
         JSONObject from = getFromJson(pushPropEntity);
         JSONArray tos = getTos(pushPropEntity.getCommunityNo(), textMessage.getAccounts());
@@ -250,8 +250,8 @@ public class MessageService {
         msg.put("list", msgList);
     }
 
-    private boolean execHttp(JSONObject content) {
-        JSONObject rstJson = null;
+    private String execHttp(JSONObject content) {
+        String result = "";
         try {
             CloseableHttpClient client = HttpClients.createDefault();
             HttpPost post = new HttpPost(pushUrl);
@@ -263,16 +263,11 @@ public class MessageService {
             CloseableHttpResponse response = client.execute(post);
             long t2 = System.currentTimeMillis();
             System.out.println("耗时：" + (t2 - t1) + "ms");
-            String result = EntityUtils.toString(response.getEntity());
-            rstJson = new JSONObject(result);
-            System.out.println("===================" + result);
+            result = EntityUtils.toString(response.getEntity());
         } catch (Exception e) {
             e.printStackTrace(System.err);
         }
 
-        if (rstJson.getJSONObject("members").getBoolean("success")) {
-            return true;
-        }
-        return false;
+        return result;
     }
 }
